@@ -150,6 +150,7 @@ public class SlideMenuAnimator {
 
     public void openAnimation() {
 
+        setViewColorsDefault();
         AlphaAnimation animation1 = new AlphaAnimation(0f, 0.5f);
         animation1.setDuration(100);
         animation1.setFillAfter(true);
