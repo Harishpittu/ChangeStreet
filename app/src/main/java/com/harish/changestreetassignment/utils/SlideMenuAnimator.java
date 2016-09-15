@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -29,10 +30,10 @@ public class SlideMenuAnimator {
     private Activity activity;
     private ArrayList<View> viewsList = new ArrayList<>();
     private List<String> menuList = new ArrayList<>();
-    private static int OPEN_ANIMATION_DURATION = 300;
+    private static int OPEN_ANIMATION_DURATION = 270;
     private static int CLOSE_ANIMATION_DURATION = 250;
-    private static int FLIP_ANIMATION_DURATION = 100;
-    private static int FLIP_ANGLE = -15;
+    private static int FLIP_ANIMATION_DURATION = 160;
+    private static int FLIP_ANGLE = -17;
     private RelativeLayout gradeOutLayout;
     private static int viewWidth;
     private OnMenuItemClickListener onMenuItemClickListener;
@@ -76,13 +77,16 @@ public class SlideMenuAnimator {
             menuLayout.addView(space);
 
             viewsList.add(viewMenu);
-            viewMenu.setOnClickListener(new View.OnClickListener() {
+            viewMenu.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View view) {
-                    TextView textView = (TextView) view.findViewById(R.id.textview);
-                    onMenuItemClickListener.onMenuItemClickListener(textView.getText().toString());
-                    clickAnimation(view);
-
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if(motionEvent.getAction()==MotionEvent.ACTION_DOWN)
+                    {
+                        TextView textView = (TextView) view.findViewById(R.id.textview);
+                        onMenuItemClickListener.onMenuItemClickListener(textView.getText().toString());
+                        clickAnimation(view);
+                    }
+                    return true;
                 }
             });
         }
@@ -90,15 +94,13 @@ public class SlideMenuAnimator {
 
     public void clickAnimation(final View view) {
         setViewColorsDefault();
-        view.setBackgroundColor(Color.parseColor("#76c7e4"));
-        TextView tv = (TextView) view.findViewById(R.id.textview);
-        tv.setTextColor(Color.WHITE);
+
 
         CustomFlipAnimation rotation =
                 new CustomFlipAnimation(0, FLIP_ANGLE, view.getWidth(), view.getHeight() / 2.0f);
         rotation.setDuration(FLIP_ANIMATION_DURATION);
         rotation.setFillAfter(true);
-        rotation.setInterpolator(new LinearInterpolator());
+        rotation.setInterpolator(new AccelerateInterpolator());
         rotation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -137,6 +139,9 @@ public class SlideMenuAnimator {
             }
         });
         view.startAnimation(rotation);
+        view.setBackgroundColor(Color.parseColor("#76c7e4"));
+        TextView tv = (TextView) view.findViewById(R.id.textview);
+        tv.setTextColor(Color.WHITE);
     }
 
     public void setViewColorsDefault() {
@@ -160,18 +165,19 @@ public class SlideMenuAnimator {
         for (int i = 0; i < viewsList.size(); i++) {
             final double position = i;
             final int viewPosition = i;
-            final double delay = (OPEN_ANIMATION_DURATION) * (position / viewsList.size());
+            final double delay = 1.1f*(OPEN_ANIMATION_DURATION) * (position / viewsList.size());
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     if (position < viewsList.size()) {
                         final View view = viewsList.get(viewPosition);
+
                         CustomFlipAnimation rotation =
-                                new CustomFlipAnimation(-20, 0, viewWidth, view.getHeight() / 2.0f);
+                                new CustomFlipAnimation(-90, 0, viewWidth, view.getHeight() / 6.0f);
                         rotation.setDuration(OPEN_ANIMATION_DURATION);
                         rotation.setFillAfter(true);
                         rotation.setInterpolator(new DecelerateInterpolator());
                         view.startAnimation(rotation);
-
+//
                         widthanim(view, 0, viewWidth, new AccelerateDecelerateInterpolator(), OPEN_ANIMATION_DURATION);
                     }
 
@@ -201,14 +207,14 @@ public class SlideMenuAnimator {
         for (int i = 0; i < viewsList.size(); i++) {
             final double position = i;
             final int viewPosition = i;
-            final double delay = (CLOSE_ANIMATION_DURATION) * (position / viewsList.size());
+            final double delay = 1.5f*(CLOSE_ANIMATION_DURATION) * (position / viewsList.size());
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     if (position < viewsList.size()) {
                         final View view = viewsList.get(viewPosition);
                         widthanim(view, viewWidth, 0, new AccelerateInterpolator(), CLOSE_ANIMATION_DURATION);
                         CustomFlipAnimation rotation =
-                                new CustomFlipAnimation(0, -20, viewWidth, view.getHeight() / 2.0f);
+                                new CustomFlipAnimation(0, -60, viewWidth, view.getHeight() / 2.0f);
                         rotation.setDuration(CLOSE_ANIMATION_DURATION);
                         rotation.setFillAfter(true);
                         rotation.setInterpolator(new AccelerateInterpolator());

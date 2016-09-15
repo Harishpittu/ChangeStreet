@@ -3,6 +3,7 @@ package com.harish.changestreetassignment.views;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.harish.changestreetassignment.R;
@@ -15,6 +16,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 //    VerticalViewPager viewPager;
     SlideMenuAnimator slideMenuAnimator;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class DashboardActivity extends AppCompatActivity {
         stringlist.add("EDUCATION");
         stringlist.add("SERVICES");
         stringlist.add("UTILITIES");
+        stringlist.add("SHOPPING");
 
         slideMenuAnimator = new SlideMenuAnimator(this, stringlist, new SlideMenuAnimator.OnMenuItemClickListener() {
             @Override
@@ -36,6 +39,7 @@ public class DashboardActivity extends AppCompatActivity {
                 Toast.makeText(DashboardActivity.this, menuItem, Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 //    private void setupViewPager(ViewPager viewPager) {
 //        FragmentsViewPagerAdapter adapter = new FragmentsViewPagerAdapter(getSupportFragmentManager());

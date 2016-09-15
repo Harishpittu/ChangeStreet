@@ -22,6 +22,7 @@
         android:fontFamily="@string/roboto_medium"
         android:gravity="center"
         android:id="@+id/info"
+        android:visibility="visible"
         android:text="Transfer amount Inr 500 from account xxxx1234 to xxxx2314"
         android:textColor="#424242"
         android:textSize="20sp" />
